@@ -14,8 +14,7 @@ title.on("change", e => {
 });
 
 // Put this in main function. This hides the other-title input upon load.
-$("#other-title").css("display", "none");
-$(".hidden").css("display", "none");
+
 
 const removeAttribute = (element, attr) => {
   return $(element).removeAttr(attr);
@@ -28,7 +27,6 @@ const addAttribute = (element, type, attr) => {
 // color will change accordingly.
 design.on("change", e => {
   if (e.target.value === "js puns") {
-    // Removes any previous elements with select type before adding its primary value with the select type.
     removeAttribute('#color option[selected="selected"]', "selected");
     addAttribute(
       '#color option[value="cornflowerblue"]',
@@ -60,7 +58,7 @@ design.on("change", e => {
   }
 });
 
-$("#total").css("width", "25%");
+
 
 const createListener = function(index_1, index_2, index_3) {
   $(".activities input")
@@ -118,9 +116,20 @@ $(".activities input").on("change", function(e) {
   }
 });
 
-createListener(1, 3, 5);
-createListener(3, 1, 5);
-createListener(5, 1, 3);
-createListener(2, 4, 6);
-createListener(4, 2, 6);
-createListener(6, 2, 4);
+const main = () =>{
+    $("#other-title").css("display", "none");
+    $(".hidden").css("display", "none");
+    $("#total").css("width", "25%");
+    
+    createListener(1, 3, 5);
+    createListener(3, 1, 5);
+    createListener(5, 1, 3);
+    createListener(2, 4, 6);
+    createListener(4, 2, 6);
+    createListener(6, 2, 4);
+
+
+
+};
+
+main();
