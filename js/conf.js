@@ -2,6 +2,8 @@ const title = $("#title");
 const design = $("#design");
 const color = $("#color");
 const activities = $(".activities");
+var total = 0;
+
 
 // This trigger will show an input box when the other option is selected.
 title.on("change", e => {
@@ -12,8 +14,6 @@ title.on("change", e => {
       .focus();
   }
 });
-
-// Put this in main function. This hides the other-title input upon load.
 
 
 const removeAttribute = (element, attr) => {
@@ -58,8 +58,6 @@ design.on("change", e => {
   }
 });
 
-
-
 const createListener = function(index_1, index_2, index_3) {
   $(".activities input")
     .eq(index_1)
@@ -94,7 +92,6 @@ const createListener = function(index_1, index_2, index_3) {
     });
 };
 
-var total = 0;
 
 $(".activities input").on("change", function(e) {
   $(".hidden").css("display", "");
@@ -116,11 +113,56 @@ $(".activities input").on("change", function(e) {
   }
 });
 
+
+// Event-listener for the payment information selections.
+$("#payment").on("change", function(e) {
+    if($(this).val() == "paypal"){
+        $("#credit-card").css("display", "none");
+        $("#bitcoin").css("display", "none");
+        $("#paypal").css("display", "");
+    } else if($(this).val() == "bitcoin"){
+        $("#credit-card").css("display", "none");
+        $("#paypal").css("display", "none");
+        $("#bitcoin").css("display", "");
+    } else {
+        $("#paypal").css("display", "none");
+        $("#bitcoin").css("display", "none");
+        $("#credit-card").css("display", "");
+    };
+});
+
+// Submit listener will check for incomplete fields.
+$("form").on("submit", function(event){
+   event.preventDefault();
+
+   const checkName = (name) => {
+        const regex = /^$/;
+        return regex.test(name);
+   }
+
+   const checkEmail = (email) => {
+        const regex = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
+   }
+
+   if(checkName($("#name").val())){
+        $("#name").css("border-color", "red");
+        $("#name").prop("placeholder", "Please enter a name");
+        $("#name").on("click", function(){
+            $(this).css("border-color", "");
+            $(this).prop("placeholder", "");
+        });
+   }
+
+
+})
+
+
 const main = () =>{
     $("#other-title").css("display", "none");
     $(".hidden").css("display", "none");
     $("#total").css("width", "25%");
-    
+    $("#paypal").css("display", "none");
+    $("#bitcoin").css("display", "none");
     createListener(1, 3, 5);
     createListener(3, 1, 5);
     createListener(5, 1, 3);
