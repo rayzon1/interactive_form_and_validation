@@ -135,24 +135,50 @@ $("#payment").on("change", function(e) {
 $("form").on("submit", function(event){
    event.preventDefault();
 
-   const checkName = (name) => {
+   const errorBox = (element, property) => {
+        $(element).css("border-color", "red");
+        $(element).prop("placeholder", property);
+   }
+
+   const testName = (name) => {
         const regex = /^$/;
         return regex.test(name);
    }
 
-   const checkEmail = (email) => {
+   const testEmail = (email) => {
         const regex = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
+        return regex.test(email);
    }
 
-   if(checkName($("#name").val())){
-        $("#name").css("border-color", "red");
-        $("#name").prop("placeholder", "Please enter a name");
-        $("#name").on("click", function(){
+   const testCheckbox = () => {
+        let checked = [];
+        let unchecked = [];
+        $('.activities input[type="checkbox"]').each(function(){
+            $(this).is(":checked") ? checked.push($(this)) : unchecked.push($(this));
+        });
+         return checked.length < 1 ? true : false;
+   }
+   console.log(testCheckbox());
+
+   if(testName($("#name").val())){
+        errorBox("#name", "Please enter a name");
+        $("#name").focus();
+        $("#name").on("keydown", function(){
             $(this).css("border-color", "");
             $(this).prop("placeholder", "");
         });
    }
 
+   if (testEmail($("#mail").val()) == false){
+        errorBox("#mail", "Please enter an email");
+        if($("#name").is(":focus") == false){
+            $("#mail").focus();
+        }
+        $("#mail").on("keydown", function(){
+            $(this).css("border-color", "");
+            $(this).prop("placeholder", "");
+        })                
+   }
 
 })
 
