@@ -51,16 +51,18 @@
           </select>
         </div>
 
-        <div>
+        <div class="tooltip">
           <label for="design">Design:</label>
+          <span class="designtooltip">Please select a theme</span>
           <select id="design" name="user_design">
             <option>Select Theme</option>
             <option value="js puns">Theme - JS Puns</option>
             <option value="heart js">Theme - I &#9829; JS</option>
           </select>
+          
         </div>
 
-        <div id="colors-js-puns" class="">
+        <div id="colors-js-puns" class="color">
           <label for="color">Color:</label>
           <select id="color">
             <option value="cornflowerblue">Cornflower Blue (JS Puns shirt only)</option>
@@ -72,9 +74,11 @@
           </select>
         </div>                
       </fieldset>
-
+      
+      <div class="tooltip">
       <fieldset class="activities">
         <legend>Register for Activities</legend>
+        <span class="activitytooltip">Please select an activity</span>
         <label><input type="checkbox" name="all"> Main Conference — $200</label>
         <label><input type="checkbox" name="js-frameworks"> JavaScript Frameworks Workshop — Tuesday 9am-12pm, $100</label>
         <label><input type="checkbox" name="js-libs"> JavaScript Libraries Workshop — Tuesday 1pm-4pm, $100</label>
@@ -85,6 +89,7 @@
         <label for="total" class="hidden">Total:</label>
         <input id="total" class="hidden" name="total" type="text" placeholder="$0" disabled>          	
       </fieldset>
+    </div>
       <fieldset>
         <legend>Payment Info</legend>
 

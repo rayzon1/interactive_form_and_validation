@@ -109,9 +109,49 @@ button {
 	cursor: pointer;
 }
 
-button:hover {
+button {
 	background: #184c62;
 }
+
+/* Tooltip container */
+.tooltip {
+	position: relative;
+	display: inline-block;
+  }
+  
+  /* Tooltip text */
+  .tooltip .designtooltip {
+	width: 120px;
+	padding: 5px;
+	background-color: rgba(24, 79, 104, 0.2);
+	color: firebrick;
+	text-align: center;
+	border-radius: 6px;
+	/* Position the tooltip text */
+	position: absolute;
+	z-index: 1;
+	left: 110%;
+	bottom: 22%;
+  }
+  .tooltip .activitytooltip {
+	width: 120px;
+	padding: 5px;
+	background-color: rgba(24, 79, 104, 0.2);
+	color: firebrick;
+	text-align: center;
+	border-radius: 6px;
+	/* Position the tooltip text */
+	position: absolute;
+	z-index: 1;
+	bottom: 77%;
+	left: 50%;
+  }
+
+  
+  /* Show the tooltip text when you mouse over the tooltip container */
+  .tooltip .designtooltip {
+	visibility: visible;
+  }
 
 /* ================================= 
   Page Styles

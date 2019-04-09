@@ -158,7 +158,7 @@ $("form").on("submit", function(event){
         });
          return checked.length < 1 ? true : false;
    }
-   console.log(testCheckbox());
+   
 
    if(testName($("#name").val())){
         errorBox("#name", "Please enter a name");
@@ -180,8 +180,22 @@ $("form").on("submit", function(event){
         })                
    }
 
-})
+   if(testCheckbox()){
+    // Add tooltip
+       if($("#name").is(":focus") == false && $("#mail").is(":focus") == false){
+            $('input[name="all"]').focus();
+       }
+       $('.activities input[type="checkbox"]').on("click", function(){
+            $(".activities legend").css("border", "none")
+            // Remove tooltip
+       })
+   }
+   
+   if($("#design option:selected").val()=="Select Theme"){
+       console.log('success');
+   }
 
+})
 
 const main = () =>{
     $("#other-title").css("display", "none");
@@ -189,6 +203,7 @@ const main = () =>{
     $("#total").css("width", "25%");
     $("#paypal").css("display", "none");
     $("#bitcoin").css("display", "none");
+    $(".color").css("display", "none")
     createListener(1, 3, 5);
     createListener(3, 1, 5);
     createListener(5, 1, 3);
