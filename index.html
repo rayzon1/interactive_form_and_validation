@@ -59,7 +59,6 @@
             <option value="js puns">Theme - JS Puns</option>
             <option value="heart js">Theme - I &#9829; JS</option>
           </select>
-          
         </div>
 
         <div id="colors-js-puns" class="color">
@@ -92,14 +91,18 @@
     </div>
       <fieldset>
         <legend>Payment Info</legend>
-
+        <div class="tooltip">
         <label for="payment">I'm going to pay with:</label>
+        <span class="creditcardtooltip">Credit Card must be 13 or 16 digits</span>
+        <span class="ziptooltip">Zip code must be 5 digits</span>
+        <span class="cvvtooltip">CVV must be 3 digits</span>
         <select id="payment" name="user_payment">
           <option value="select_method" disabled>Select Payment Method</option>
           <option value="credit card" selected>Credit Card</option>
           <option value="paypal">PayPal</option>
           <option value="bitcoin">Bitcoin</option>
         </select>
+      </div>
 
         <div id="credit-card" class="credit-card">
 

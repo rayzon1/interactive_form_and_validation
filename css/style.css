@@ -131,7 +131,7 @@ button {
 	position: absolute;
 	z-index: 1;
 	left: 110%;
-	bottom: 22%;
+	bottom: 100%;
   }
   .tooltip .activitytooltip {
 	width: 120px;
@@ -146,6 +146,46 @@ button {
 	bottom: 77%;
 	left: 50%;
   }
+  .tooltip .creditcardtooltip {
+	width: 120px;
+	padding: 5px;
+	background-color: rgba(24, 79, 104, 0.2);
+	color: firebrick;
+	text-align: center;
+	border-radius: 6px;
+	/* Position the tooltip text */
+	position: absolute;
+	z-index: 1;
+	bottom: 20%;
+	left: 120%;
+  }
+  .tooltip .ziptooltip {
+	width: 120px;
+	padding: 5px;
+	background-color: rgba(24, 79, 104, 0.2);
+	color: firebrick;
+	text-align: center;
+	border-radius: 6px;
+	/* Position the tooltip text */
+	position: absolute;
+	z-index: 1;
+	bottom: 20%;
+	left: 210%;
+  }
+  .tooltip .cvvtooltip {
+	width: 120px;
+	padding: 5px;
+	background-color: rgba(24, 79, 104, 0.2);
+	color: firebrick;
+	text-align: center;
+	border-radius: 6px;
+	/* Position the tooltip text */
+	position: absolute;
+	z-index: 1;
+	bottom: 20%;
+	left: 300%;
+  }
+
 
   
   /* Show the tooltip text when you mouse over the tooltip container */
