@@ -1,3 +1,17 @@
+/* ======================================================
+
+Author: Gerardo Keys
+Description: This project is the third project for teamtreehouse. This project
+will validate input fields using jQuery before the user is able to submit the
+form. There will be included tooltips next to the input fields in order to clarify
+what's missing to the user. The tooltips will change dynamically if the input is blank 
+or missing required elements. When the required fields are complete the form will 
+submit (reload).
+
+======================================================= */
+
+// Various variables holding selected elements. This is an attempt
+// to have cleaner code.
 const title = $("#title");
 const design = $("#design");
 const color = $("#color");
@@ -14,11 +28,12 @@ title.on("change", e => {
   }
 });
 
-// Short functions to remove or add an attribute.
+// Short function to remove attribute specified.
 const removeAttribute = (element, attr) => {
   return $(element).removeAttr(attr);
 };
 
+// Short function to add attribute specified.
 const addAttribute = (element, type, attr) => {
   return $(element).prop(type, attr);
 };
@@ -30,17 +45,18 @@ const falseTest = element => {
 
 // Puts a red border around input field with a placeholder specified by argument.
 const errorBox = (element, property) => {
-  $(element).css("border-color", "red");
-  $(element).prop("placeholder", property);
+  $(element)
+    .css("border-color", "red")
+    .prop("placeholder", property);
 };
 
-// Tests name against regex.
+// Tests name value field against regex.
 const testName = name => {
   const regex = /^$/;
   return regex.test(name);
 };
 
-// Tests email against regex.
+// Tests email value field against regex.
 const testEmail = email => {
   const regex = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
   return regex.test(email);
@@ -51,32 +67,36 @@ const testEmail = email => {
 const testCheckbox = () => {
   let checked = [];
   $('.activities input[type="checkbox"]').each(function() {
-      if($(this).is(":checked")){
-        checked.push($(this))
-      }
+    if ($(this).is(":checked")) {
+      checked.push($(this));
+    }
   });
   return checked.length < 1 ? true : false;
 };
 
+// Tests the credit card value field against the regex.
 const testCreditCard = value => {
   const regex = /^([0-9]{13}|[0-9]{16})$/;
   return regex.test(value);
 };
 
+// Tests the zip code value field against the regex.
 const testZipCode = value => {
   const regex = /^[0-9]{5}$/;
   return regex.test(value);
 };
 
+// Tests the cvv value field against the regex.
 const testCvv = value => {
   const regex = /^[0-9]{3}$/;
   return regex.test(value);
 };
 
 // This is the event listener for the design select element. Depending on selection
-// color will change accordingly.
+// color will change accordingly. The color option will remain hidden until a selection
+// is made.
 design.on("change", e => {
-  if (e.target.value === "js puns") {
+  if ($(e.target).val() === "js puns") {
     $(".color").css("display", "");
     removeAttribute('#color option[selected="selected"]', "selected");
     addAttribute(
@@ -87,13 +107,13 @@ design.on("change", e => {
     $("#color option").each(function(i) {
       i <= 2 ? (this.style.display = "") : (this.style.display = "none");
     });
-  } else if (e.target.value === "heart js") {
+  } else if ($(e.target).val() === "heart js") {
     $(".color").css("display", "");
     addAttribute('#color option[value="tomato"]', "selected", "selected");
     $("#color option").each(function(i) {
       i >= 3 ? (this.style.display = "") : (this.style.display = "none");
     });
-  } else if (e.target.value === "select") {
+  } else if ($(e.target).val() === "select") {
     $(".color").css("display", "none");
     removeAttribute('#color option[selected="selected"]', "selected");
     addAttribute(
@@ -104,6 +124,9 @@ design.on("change", e => {
   }
 });
 
+// This function will create a listener for the checkbox fields to disable any
+// times conflicting with a selected field. Depending on the indexes given, the
+// checkboxes will display accordingly. This is an attempt to minimize code.
 const createListener = function(index_1, index_2, index_3) {
   $(".activities input")
     .eq(index_1)
@@ -138,6 +161,8 @@ const createListener = function(index_1, index_2, index_3) {
     });
 };
 
+// This change listener will extract the number values from the checkbox fields
+// then add them to a running total which will be displayed below the checkboxes.
 $(".activities input").on("change", function(e) {
   $(".hidden").css("display", "");
   const regex = /\d{3}/;
@@ -158,23 +183,48 @@ $(".activities input").on("change", function(e) {
   }
 });
 
-// Event-listener for the payment information selections.
-$("#payment").on("change", function(e) {
+// Listener for the name field will change error dynamically until characters are
+// inputted in the field.
+$("#name").on(" keydown keyup click", function() {
+  if (testName($("#name").val())) {
+    errorBox("#name", "Invalid name");
+  } else {
+    $(this)
+      .css("border-color", "")
+      .prop("placeholder", "");
+  }
+});
+
+// Listener for email field which will change error dynamically until a value
+// formatted as an email (includes "." and "@").
+$("#mail").on("keydown keyup click", function() {
+  if (testEmail($("#mail").val())) {
+    $(this)
+      .css("border-color", "")
+      .prop("placeholder", "");
+  } else {
+    errorBox("#mail", "Invalid email");
+  }
+});
+
+// This change listener will display or hide elements based on the selected option
+// within the payment section.
+$("#payment").on("change", function() {
+  // Function here was made to specify the display property of either paypal or
+  // bitcoin fields. I made this in an effort to minimize repeated code.
+  const payOrBit = (paypal, bitcoin) => {
+    $(".creditcardtooltip").css("display", "none");
+    $(".ziptooltip").css("display", "none");
+    $(".cvvtooltip").css("display", "none");
+    $("#credit-card").css("display", "none");
+    $("#bitcoin").css("display", bitcoin);
+    $("#paypal").css("display", paypal);
+  };
+
   if ($(this).val() == "paypal") {
-    $(".creditcardtooltip").css("display", "none");
-    $(".ziptooltip").css("display", "none");
-    $(".cvvtooltip").css("display", "none");
-    $("#credit-card").css("display", "none");
-    $("#cc-num").val("");
-    $("#bitcoin").css("display", "none");
-    $("#paypal").css("display", "");
+    payOrBit("", "none");
   } else if ($(this).val() == "bitcoin") {
-    $(".creditcardtooltip").css("display", "none");
-    $(".ziptooltip").css("display", "none");
-    $(".cvvtooltip").css("display", "none");
-    $("#credit-card").css("display", "none");
-    $("#paypal").css("display", "none");
-    $("#bitcoin").css("display", "");
+    payOrBit("none", "");
   } else {
     $("#paypal").css("display", "none");
     $("#bitcoin").css("display", "none");
@@ -182,93 +232,94 @@ $("#payment").on("change", function(e) {
   }
 });
 
-$("#mail").on("keydown click", function() {
-  if (testEmail($("#mail").val())) {
-    $(this).css("border-color", "");
-    $(this).prop("placeholder", "");
-  } else {
-    errorBox("#mail", "Invalid email");
-  }
-});
-
+// Listener for credit card field, will dynamically display error and tooltip as
+// the user types in the field if number is not either 13 or 16 digits long.
 $("#cc-num").on("keyup click", function() {
   if (testCreditCard($("#cc-num").val())) {
     $(".creditcardtooltip").css("display", "none");
-    $(this).css("border-color", "");
-    $(this).prop("placeholder", "");
+    $(this)
+      .css("border-color", "")
+      .prop("placeholder", "");
   } else {
-    $(".creditcardtooltip").text("Credit Card must be 13 or 16 digits");
-    $(".creditcardtooltip").css("display", "");
+    $(".creditcardtooltip")
+      .text("Credit Card must be 13 or 16 digits")
+      .css("display", "");
     errorBox("#cc-num", "Please enter a valid credit card");
   }
   if (testName($("#cc-num").val())) {
-    $(".creditcardtooltip").text("Credit card cannot be blank");
-    $(".creditcardtooltip").css("display", "");
+    $(".creditcardtooltip")
+      .text("Credit card cannot be blank")
+      .css("display", "");
   }
 });
 
+// Listener for zip-code field. This will display an error dynamically based on user
+// input. Error will show if there are more or less than 5-digits.
 $("#zip").on("keyup click", function() {
   if (testZipCode($("#zip").val())) {
     $(".ziptooltip").css("display", "none");
-    $(this).css("border-color", "");
-    $(this).prop("placeholder", "");
+    $(this)
+      .css("border-color", "")
+      .prop("placeholder", "");
   } else {
-    $(".ziptooltip").text("Zip code must be 5 digits");
-    $(".ziptooltip").css("display", "");
+    $(".ziptooltip")
+      .text("Zip code must be 5 digits")
+      .css("display", "");
     errorBox("#zip", "Invalid zip");
   }
   if (testName($("#zip").val())) {
-    $(".ziptooltip").text("Zip code cannot be blank");
-    $(".ziptooltip").css("display", "");
+    $(".ziptooltip")
+      .text("Zip code cannot be blank")
+      .css("display", "");
   }
 });
 
+// The cvv listener will test the value of the cvv field and will display an error
+// if it is not 3 digits.
 $("#cvv").on("keyup click", function() {
   if (testCvv($("#cvv").val())) {
     $(".cvvtooltip").css("display", "none");
-    $(this).css("border-color", "");
-    $(this).prop("placeholder", "");
+    $(this)
+      .css("border-color", "")
+      .prop("placeholder", "");
   } else {
-    $(".cvvtooltip").text("CVV must be 3 digits");
-    $(".cvvtooltip").css("display", "");
+    $(".cvvtooltip")
+      .text("CVV must be 3 digits")
+      .css("display", "");
     errorBox("#cvv", "Invalid cvv");
   }
   if (testName($("#cvv").val())) {
-    $(".cvvtooltip").text("CVV cannot be blank");
-    $(".cvvtooltip").css("display", "");
+    $(".cvvtooltip")
+      .text("CVV cannot be blank")
+      .css("display", "");
   }
 });
 
-$("#name").on("keyup keydown click", function() {
-    if(testName($("#name").val())){
-        errorBox("#name", "Invalid name");
+// This is the listener for the register button (submit) element. Upon submission
+// all input fields will be tested against their regex. Each block will test the
+// values and produce an error field or remove an error field.
+$("form").on("submit", function(event) {
+  event.preventDefault();
+
+  $("#mail").on("keyup", function() {
+    if (testEmail($("#mail").val())) {
+      $(this)
+        .css("border-color", "")
+        .prop("placeholder", "");
     } else {
-        $(this).css("border-color", "");
-        $(this).prop("placeholder", "");
+      errorBox("#mail", "Invalid email");
     }
   });
 
-// Submit listener will check for incomplete fields.
-$("form").on("submit", function(event) {
-    event.preventDefault();
-
-  $("#mail").on("keyup", function() {
-        if (testEmail($("#mail").val())) {
-            $(this).css("border-color", "")
-                .prop("placeholder", "");
-        } else {
-            errorBox("#mail", "Invalid email");
-            
-        }
-    });
-
-    if (testName($("#name").val())) {
-        errorBox("#name", "Please enter a name");
-        $("#name").focus();
-        $("#name").on("keydown", function() {
-        $(this).css("border-color", "");
-        $(this).prop("placeholder", "");
-    });
+  if (testName($("#name").val())) {
+    errorBox("#name", "Please enter a name");
+    $("#name")
+      .focus()
+      .on("keydown", function() {
+        $(this)
+          .css("border-color", "")
+          .prop("placeholder", "");
+      });
   }
 
   if (testEmail($("#mail").val()) == false) {
@@ -276,13 +327,16 @@ $("form").on("submit", function(event) {
     if (falseTest("#name")) {
       $("#mail").focus();
     }
-    $("#mail").on("keyup", function() {
-      $(this).css("border-color", "");
-      $(this).prop("placeholder", "");
+    $("#mail").on("keydown", function() {
+      $(this)
+        .css("border-color", "")
+        .prop("placeholder", "");
     });
   }
 
-  if ($("#design option:selected").val() == "Select Theme") {
+  // This will test whether the design select field has "Select Theme" selected
+  // or not. If it does then an error will show.
+  if ($("#design option:selected").val() == "select") {
     $(".color").css("display", "none");
     $("#design").css("border", "2px solid red");
     $(".designtooltip").css("display", "");
@@ -305,7 +359,6 @@ $("form").on("submit", function(event) {
     });
   }
 
-  // Function testCreditCard will verify if cc number is between 13-16 digits.4
   if (testCreditCard($("#cc-num").val()) == false) {
     if (testName($("#cc-num").val())) {
       $(".creditcardtooltip").text("Credit card cannot be blank");
@@ -317,7 +370,6 @@ $("form").on("submit", function(event) {
     }
   }
 
-  // Same as testCreditCard except this will test for 5-digit zipcode.
   if (testZipCode($("#zip").val()) == false) {
     if (testName($("#zip").val())) {
       $(".ziptooltip").text("Zip code cannot be blank");
@@ -348,30 +400,24 @@ $("form").on("submit", function(event) {
     $(".ziptooltip").css("display", "none");
     $(".cvvtooltip").css("display", "none");
   }
-    
-    if (
-        testName($("#name").val()) == false &&
-        testEmail($("#mail").val()) == true &&
-        testCheckbox() == false &&
-        testCreditCard($("#cc-num").val()) == true &&
-        testZipCode($("#zip").val()) == true &&
-        testCvv($("#cvv").val()) == true 
-    ) {
-        location.reload()
-    } else if (
-        $("#credit-card").is(":hidden") == true &&
-        testName($("#name").val()) == false &&
-        testEmail($("#mail").val()) == true &&
-        testCheckbox() == false 
-    ){
-        location.reload()
-    }
-    //console.log($("#credit-card").is(":hidden"))
 
-    // console.log($("#credit-card").is(":hidden"))
-    // console.log($("#design option[value='select']").is(":selected"))
+  // This block will reload the page once all required fields are met. This
+  // only simulates the submission.
+  if (
+    testName($("#name").val()) == false &&
+    testEmail($("#mail").val()) == true &&
+    $(".creditcardtooltip").is(":hidden") &&
+    $(".ziptooltip").is(":hidden") &&
+    $(".cvvtooltip").is(":hidden") &&
+    $(".designtooltip").is(":hidden") &&
+    $(".activitytooltip").is(":hidden")
+  ) {
+    location.reload();
+  }
 });
 
+// Main function will be the first function run. This will hide the tooltips as well
+// as the various elements that need to be hidden upon load.
 const main = () => {
   $("#other-title").css("display", "none");
   $(".hidden").css("display", "none");
