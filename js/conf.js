@@ -21,10 +21,11 @@ var total = 0;
 // This trigger will show an input box when the other option is selected.
 title.on("change", e => {
   if (e.target.value === "other") {
-    title.css("display", "none");
     $("#other-title")
       .css("display", "")
       .focus();
+  } else {
+      $("#other-title").css("display", "none");
   }
 });
 
@@ -76,7 +77,7 @@ const testCheckbox = () => {
 
 // Tests the credit card value field against the regex.
 const testCreditCard = value => {
-  const regex = /^([0-9]{13}|[0-9]{16})$/;
+  const regex = /^([0-9]{13,16})$/;
   return regex.test(value);
 };
 
@@ -127,7 +128,7 @@ design.on("change", e => {
 // This function will create a listener for the checkbox fields to disable any
 // times conflicting with a selected field. Depending on the indexes given, the
 // checkboxes will display accordingly. This is an attempt to minimize code.
-const createListener = function(index_1, index_2, index_3) {
+const createListener = function(index_1, index_2) {
   $(".activities input")
     .eq(index_1)
     .change(function() {
@@ -135,27 +136,15 @@ const createListener = function(index_1, index_2, index_3) {
         $(".activities input")
           .eq(index_2)
           .prop("disabled", "disabled");
-        $(".activities input")
-          .eq(index_3)
-          .prop("disabled", "disabled");
         $(".activities label")
           .eq(index_2)
-          .css("text-decoration", "line-through");
-        $(".activities label")
-          .eq(index_3)
           .css("text-decoration", "line-through");
       } else {
         $(".activities input")
           .eq(index_2)
           .removeAttr("disabled");
-        $(".activities input")
-          .eq(index_3)
-          .removeAttr("disabled");
         $(".activities label")
           .eq(index_2)
-          .css("text-decoration", "");
-        $(".activities label")
-          .eq(index_3)
           .css("text-decoration", "");
       }
     });
@@ -242,7 +231,7 @@ $("#cc-num").on("keyup click", function() {
       .prop("placeholder", "");
   } else {
     $(".creditcardtooltip")
-      .text("Credit Card must be 13 or 16 digits")
+      .text("Credit Card must be 13 through 16 digits")
       .css("display", "");
     errorBox("#cc-num", "Please enter a valid credit card");
   }
@@ -392,6 +381,17 @@ $("form").on("submit", function(event) {
     }
   }
 
+  if(testName($("#other-title").val())){
+    errorBox("#other-title", "Please enter a job role");
+    $("#other-title")
+      .focus()
+      .on("keydown", function() {
+        $(this)
+          .css("border-color", "")
+          .prop("placeholder", "");
+      });
+  }
+
   if (
     $("#payment option:selected").val() == "paypal" ||
     $("#payment option:selected").val() == "bitcoin"
@@ -410,7 +410,8 @@ $("form").on("submit", function(event) {
     $(".ziptooltip").is(":hidden") &&
     $(".cvvtooltip").is(":hidden") &&
     $(".designtooltip").is(":hidden") &&
-    $(".activitytooltip").is(":hidden")
+    $(".activitytooltip").is(":hidden") &&
+    ($("#other-title").is(":hidden") || testName($("#other-title").val()) == false)
   ) {
     location.reload();
   }
@@ -430,12 +431,10 @@ const main = () => {
   $(".creditcardtooltip").css("display", "none");
   $(".ziptooltip").css("display", "none");
   $(".cvvtooltip").css("display", "none");
-  createListener(1, 3, 5);
-  createListener(3, 1, 5);
-  createListener(5, 1, 3);
-  createListener(2, 4, 6);
-  createListener(4, 2, 6);
-  createListener(6, 2, 4);
+  createListener(1, 3);
+  createListener(3, 1);
+  createListener(2, 4);
+  createListener(4, 2);
 };
 
 main();
